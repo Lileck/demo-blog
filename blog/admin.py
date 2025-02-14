@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Category, Post
+from .models import Category, Post, Like, Comment, Donat  
 
 
 @admin.register(Category)

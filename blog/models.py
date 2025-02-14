@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 # https://azinkin.ru/orm.html
@@ -55,3 +56,83 @@ class Post(models.Model):
         verbose_name = 'пост'
         verbose_name_plural = 'публикации'
         unique_together = ('category', 'slug')
+        class Like(models.Model):
+    post = models.ForeignKey(
+        Post,
+        verbose_name='публикация',
+        on_delete=models.CASCADE,
+        related_name='likes'  
+    )
+    created_date = models.DateTimeField(
+        verbose_name='дата создания',
+        auto_now_add=True
+    )
+    reaction = models.SmallIntegerField(
+        verbose_name='реакция',
+        choices=((1, 'Like'), (-1, 'Dislike')),  
+        default=1
+    )
+
+    user = models.ForeignKey( 
+        settings.AUTH_USER_MODEL,
+        verbose_name = "пользователь",
+        on_delete = models.CASCADE
+    )
+
+    class Meta:
+        verbose_name = 'лайк'
+        verbose_name_plural = 'лайки'
+        unique_together = ('post', 'user')  
+
+class Comment(models.Model):
+    post = models.ForeignKey(
+        Post,
+        verbose_name='публикация',
+        on_delete=models.CASCADE,
+        related_name='comments' 
+    )
+    name = models.CharField(
+        verbose_name='имя',
+        max_length=255
+    )
+    comment = models.TextField(
+        verbose_name='комментарий'
+    )
+    created_date = models.DateTimeField(
+        verbose_name='дата создания',
+        auto_now_add=True
+    )
+    parent_comment = models.ForeignKey(
+        'self', 
+        verbose_name='родительский комментарий',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL, 
+        related_name='replies'    
+    )
+
+    class Meta:
+        verbose_name = 'комментарий'
+        verbose_name_plural = 'комментарии'
+
+class Donation(models.Model):
+    title = models.CharField(
+        verbose_name='название',
+        max_length=255
+    )
+    link = models.URLField(
+        verbose_name='ссылка'
+    )
+    picture = models.ImageField(
+        verbose_name='картинка',
+        blank=True,
+        upload_to='donations/' 
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+         verbose_name = 'пожертвование'
+         verbose_name_plural = 'пожертвования'
+        

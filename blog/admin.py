@@ -13,6 +13,10 @@ class CategoryAdmin(admin.ModelAdmin):
 class PostAdmin(admin.ModelAdmin):
     ...
     
+    @admin.register(Like)
+class LikeAdmin(admin.ModelAdmin):
+    ...
+    
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     ...
@@ -20,4 +24,4 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(Donat)
 class DonatAdmin(admin.ModelAdmin):
     ...
-    
+

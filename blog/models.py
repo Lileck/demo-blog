@@ -114,7 +114,7 @@ class Comment(models.Model):
         verbose_name = 'комментарий'
         verbose_name_plural = 'комментарии'
 
-class Donation(models.Model):
+class Donat(models.Model):
     title = models.CharField(
         verbose_name='название',
         max_length=255

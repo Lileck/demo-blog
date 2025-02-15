@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import timezone
+
 # Create your models here.
 # https://azinkin.ru/orm.html
 
@@ -55,7 +55,8 @@ class Post(models.Model):
         verbose_name = 'пост'
         verbose_name_plural = 'публикации'
         unique_together = ('category', 'slug')
-      class Comment(models.Model):
+        
+ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     name = models.CharField(max_length=255)
     content = models.TextField()

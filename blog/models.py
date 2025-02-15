@@ -137,7 +137,7 @@ class Donat(models.Model):
         null=True, blank=True  
     )
 
-    def __str__(self):  # Use __str__ instead of str
+    def __str__(self):  
         return self.title
 
     class Meta:

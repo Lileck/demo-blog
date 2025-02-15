@@ -82,10 +82,10 @@ class Like(models.Model):
         verbose_name = "Лайк"
         verbose_name_plural = "Лайки"
 
-class Donation(models.Model):
+class Donat(models.Model):
     title = models.CharField(max_length=255)
     link = models.URLField()
-    image = models.ImageField(upload_to='donations/')
+    image = models.ImageField(upload_to='donat/')
 
     def __str__(self):
         return self.title

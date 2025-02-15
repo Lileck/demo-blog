@@ -113,4 +113,54 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'комментарий'
         verbose_name_plural = 'комментарии'
+class Comment(models.Model):
+    post = models.ForeignKey(
+        Post,
+        verbose_name='публикация',
+        on_delete=models.CASCADE,
+        related_name='comments'  
+    )
+    name = models.CharField(
+        verbose_name='имя',
+        max_length=255
+    )
+    comment = models.TextField(
+        verbose_name='комментарий'
+    )
+    created_date = models.DateTimeField(
+        verbose_name='дата создания',
+        auto_now_add=True
+    )
+    parent_comment = models.ForeignKey(
+        'self', 
+        verbose_name='родительский комментарий',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='replies'
+    )
 
+    class Meta:
+        verbose_name = 'комментарий'
+        verbose_name_plural = 'комментарии'
+
+class Donat(models.Model):
+    title = models.CharField(
+        verbose_name='название',
+        max_length=255
+    )
+    link = models.URLField(
+        verbose_name='ссылка'
+    )
+    picture = models.ImageField(
+        verbose_name='картинка',
+        blank=True,
+        upload_to='donations/' 
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'пожертвование'
+        verbose_name_plural = 'пожертвования'

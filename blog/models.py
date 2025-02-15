@@ -55,12 +55,12 @@ class Post(models.Model):
         verbose_name = 'пост'
         verbose_name_plural = 'публикации'
         unique_together = ('category', 'slug')
-        class Like(models.Model):
+      class Like(models.Model):
     post = models.ForeignKey(
         Post,
         verbose_name='публикация',
         on_delete=models.CASCADE,
-        related_name='likes' 
+        related_name='likes'
     )
     created_date = models.DateTimeField(
         verbose_name='дата создания',
@@ -68,27 +68,28 @@ class Post(models.Model):
     )
     reaction = models.SmallIntegerField(
         verbose_name='реакция',
-        choices=((1, 'Like'), (-1, 'Dislike')),  
+        choices=((1, 'Like'), (-1, 'Dislike')),
         default=1
     )
 
-    user = models.ForeignKey( # Add User model here
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        verbose_name = "пользователь",
-        on_delete = models.CASCADE
+        verbose_name="пользователь",
+        on_delete=models.CASCADE
     )
 
     class Meta:
         verbose_name = 'лайк'
         verbose_name_plural = 'лайки'
-        unique_together = ('post', 'user')  
+        unique_together = ('post', 'user')
 
-class Comment(models.Model):
+
+class Comment(models.Model): 
     post = models.ForeignKey(
         Post,
         verbose_name='публикация',
         on_delete=models.CASCADE,
-        related_name='comments'  
+        related_name='comments'
     )
     name = models.CharField(
         verbose_name='имя',
@@ -102,7 +103,7 @@ class Comment(models.Model):
         auto_now_add=True
     )
     parent_comment = models.ForeignKey(
-        'self', 
+        'self',
         verbose_name='родительский комментарий',
         null=True,
         blank=True,
@@ -113,36 +114,7 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'комментарий'
         verbose_name_plural = 'комментарии'
-class Comment(models.Model):
-    post = models.ForeignKey(
-        Post,
-        verbose_name='публикация',
-        on_delete=models.CASCADE,
-        related_name='comments'  
-    )
-    name = models.CharField(
-        verbose_name='имя',
-        max_length=255
-    )
-    comment = models.TextField(
-        verbose_name='комментарий'
-    )
-    created_date = models.DateTimeField(
-        verbose_name='дата создания',
-        auto_now_add=True
-    )
-    parent_comment = models.ForeignKey(
-        'self', 
-        verbose_name='родительский комментарий',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='replies'
-    )
 
-    class Meta:
-        verbose_name = 'комментарий'
-        verbose_name_plural = 'комментарии'
 
 class Donat(models.Model):
     title = models.CharField(
@@ -155,10 +127,17 @@ class Donat(models.Model):
     picture = models.ImageField(
         verbose_name='картинка',
         blank=True,
-        upload_to='donations/' 
+        upload_to='donations/'
+    )
+    post = models.ForeignKey(  
+
+        verbose_name='публикация',
+        on_delete=models.CASCADE,
+        related_name='donats', 
+        null=True, blank=True  
     )
 
-    def __str__(self):
+    def __str__(self):  # Use __str__ instead of str
         return self.title
 
     class Meta:

@@ -55,91 +55,40 @@ class Post(models.Model):
         verbose_name = 'пост'
         verbose_name_plural = 'публикации'
         unique_together = ('category', 'slug')
-      class Like(models.Model):
-    post = models.ForeignKey(
-        Post,
-        verbose_name='публикация',
-        on_delete=models.CASCADE,
-        related_name='likes'
-    )
-    created_date = models.DateTimeField(
-        verbose_name='дата создания',
-        auto_now_add=True
-    )
-    reaction = models.SmallIntegerField(
-        verbose_name='реакция',
-        choices=((1, 'Like'), (-1, 'Dislike')),
-        default=1
-    )
+      class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    name = models.CharField(max_length=255)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        verbose_name="пользователь",
-        on_delete=models.CASCADE
-    )
+    def __str__(self):
+        return f"Comment by {self.name} on {self.post.title}"
 
     class Meta:
-        verbose_name = 'лайк'
-        verbose_name_plural = 'лайки'
-        unique_together = ('post', 'user')
+        verbose_name = "Комментарий"
+        verbose_name_plural = "Комментарии"
 
+class Like(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+    created_at = models.DateTimeField(auto_now_add=True)
+    reaction = models.IntegerField(choices=[(1, 'Лайк'), (-1, 'Дизлайк')])
 
-class Comment(models.Model): 
-    post = models.ForeignKey(
-        Post,
-        verbose_name='публикация',
-        on_delete=models.CASCADE,
-        related_name='comments'
-    )
-    name = models.CharField(
-        verbose_name='имя',
-        max_length=255
-    )
-    comment = models.TextField(
-        verbose_name='комментарий'
-    )
-    created_date = models.DateTimeField(
-        verbose_name='дата создания',
-        auto_now_add=True
-    )
-    parent_comment = models.ForeignKey(
-        'self',
-        verbose_name='родительский комментарий',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='replies'
-    )
+    def __str__(self):
+        return f"Like on {self.post.title}"
 
     class Meta:
-        verbose_name = 'комментарий'
-        verbose_name_plural = 'комментарии'
+        verbose_name = "Лайк"
+        verbose_name_plural = "Лайки"
 
+class Donation(models.Model):
+    title = models.CharField(max_length=255)
+    link = models.URLField()
+    image = models.ImageField(upload_to='donations/')
 
-class Donat(models.Model):
-    title = models.CharField(
-        verbose_name='название',
-        max_length=255
-    )
-    link = models.URLField(
-        verbose_name='ссылка'
-    )
-    picture = models.ImageField(
-        verbose_name='картинка',
-        blank=True,
-        upload_to='donations/'
-    )
-    post = models.ForeignKey(  
-
-        verbose_name='публикация',
-        on_delete=models.CASCADE,
-        related_name='donats', 
-        null=True, blank=True  
-    )
-
-    def __str__(self):  
+    def __str__(self):
         return self.title
 
     class Meta:
-        verbose_name = 'пожертвование'
-        verbose_name_plural = 'пожертвования'
+        verbose_name = "Донат"
+        verbose_name_plural = "Донаты"

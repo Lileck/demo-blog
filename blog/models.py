@@ -114,23 +114,3 @@ class Comment(models.Model):
         verbose_name = 'комментарий'
         verbose_name_plural = 'комментарии'
 
-class Donat(models.Model):
-    title = models.CharField(
-        verbose_name='название',
-        max_length=255
-    )
-    link = models.URLField(
-        verbose_name='ссылка'
-    )
-    picture = models.ImageField(
-        verbose_name='картинка',
-        blank=True,
-        upload_to='donations/' 
-    )
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = 'пожертвование'
-        verbose_name_plural = 'пожертвования'
